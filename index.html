@@ -7,61 +7,66 @@
     <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #2c3e50; --accent: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f4f7f6; }
-        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--bg); margin: 0; padding: 10px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
         .page { display: none; }
         .page.active { display: block; }
-        h1 { text-align: center; color: var(--primary); font-size: 1.5em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
-        h2 { background: #ebf5fb; padding: 10px; border-left: 6px solid var(--accent); margin-top: 20px; font-size: 1.1em; }
-        .card { border: 1px solid #dcdde1; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9em; }
-        th, td { border: 1px solid #dcdde1; padding: 8px; text-align: left; }
-        th { background: #f8f9fa; }
-        select, input { width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; box-sizing: border-box; }
-        .risk-3 { background-color: #f8d7da !important; }
+        h1 { text-align: center; color: var(--primary); font-size: 1.6em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { background: #ebf5fb; padding: 10px; border-left: 6px solid var(--accent); margin-top: 25px; font-size: 1.1em; border-radius: 0 4px 4px 0; }
+        .card { border: 1px solid #dcdde1; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
+        th, td { border: 1px solid #dcdde1; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; box-sizing: border-box; }
+        .risk-3 { background-color: #f8d7da !important; font-weight: bold; }
         .risk-2 { background-color: #fff3cd !important; }
-        
-        /* 自評表標籤樣式 */
-        .q-row { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .q-text { font-weight: bold; color: #34495e; display: block; margin-bottom: 10px; }
-        .options-flex { display: flex; justify-content: space-between; background: #f9f9f9; padding: 10px; border-radius: 8px; }
-        .opt-label { display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer; font-size: 0.8em; }
-        .opt-label input { margin-bottom: 5px; width: 18px; height: 18px; }
 
-        .nav-tabs { display: flex; margin-bottom: 15px; }
-        .tab { flex: 1; padding: 10px; cursor: pointer; background: #eee; border: none; font-weight: bold; border-radius: 8px 8px 0 0; }
+        /* 自評表選項標籤 */
+        .q-row { border-bottom: 2px solid #f0f0f0; padding: 20px 0; }
+        .q-text { font-size: 1.05em; font-weight: bold; color: #34495e; display: block; margin-bottom: 15px; }
+        .options-flex { display: flex; justify-content: space-between; align-items: flex-start; background: #fafafa; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+        .opt-label { display: flex; flex-direction: column; align-items: center; cursor: pointer; flex: 1; text-align: center; padding: 5px; }
+        .opt-label input { width: 20px; height: 20px; margin-bottom: 8px; cursor: pointer; }
+        .opt-txt { font-weight: bold; color: var(--primary); font-size: 0.9em; }
+        .opt-score { font-size: 0.75em; color: #888; margin-top: 4px; }
+
+        .nav-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; background: #eee; border: none; font-weight: bold; border-radius: 8px 8px 0 0; transition: 0.3s; }
         .tab.active { background: var(--accent); color: white; }
-        
-        .footer-total { position: sticky; bottom: 0; background: var(--primary); color: white; padding: 15px; display: flex; flex-direction: column; gap: 10px; border-radius: 10px; align-items: center; }
-        .btn-group { display: flex; gap: 10px; width: 100%; }
-        .btn-action { flex: 1; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; }
+
+        .footer-total { position: sticky; bottom: 0; background: var(--primary); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; margin-top: 25px; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        .btn-group { display: flex; gap: 10px; }
+        .btn-action { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
+        .btn-success { background: var(--success); }
+        .btn-cloud { background: #8e44ad; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="nav-tabs">
-        <button id="tab-main" class="tab active" onclick="showPage('main')">醫護總表</button>
-        <button id="tab-self" class="tab" onclick="showPage('self')">照顧者自評</button>
+        <button id="tab-main" class="tab active" onclick="showPage('main')">11項指標總表</button>
+        <button id="tab-self" class="tab" onclick="showPage('self')">照顧者自評 (H-CWS)</button>
     </div>
 
     <div id="page-main" class="page active">
-        <h1>居家小兒呼吸評估系統</h1>
+        <h1>居家小兒呼吸照護綜合評估</h1>
+        
         <div class="card">
-            <h2>基本資料與矯正月齡</h2>
+            <h2>基本資料 (自動計算月齡)</h2>
             <div class="grid">
-                <div>姓名 <input type="text" id="case_name"></div>
+                <div>姓名 <input type="text" id="case_name" placeholder="請輸入姓名"></div>
                 <div>性別 <select id="gender" onchange="autoJudge()"><option value="male">男童</option><option value="female">女童</option></select></div>
                 <div>出生日期 <input type="date" id="b_date" onchange="autoJudge()"></div>
                 <div>評估日期 <input type="date" id="e_date" onchange="autoJudge()"></div>
-                <div>早產週/天 <div style="display:flex;gap:2px;"><input type="number" id="b_w" placeholder="週" oninput="autoJudge()"><input type="number" id="b_d" placeholder="天" oninput="autoJudge()"></div></div>
+                <div>出生週/天 <div style="display:flex;gap:5px;"><input type="number" id="b_w" placeholder="週" oninput="autoJudge()"><input type="number" id="b_d" placeholder="天" oninput="autoJudge()"></div></div>
             </div>
-            <p id="age_info" style="color:var(--accent); font-weight:bold; margin-top:10px;"></p>
+            <p id="age_info" style="color:var(--accent); font-weight:bold; margin-top:15px; text-align:center;"></p>
         </div>
 
         <div class="card">
-            <h2>生長與營養評估 (WHO標準)</h2>
+            <h2>生長與營養指標 (自動判定)</h2>
             <div class="grid">
                 <div>身高(cm) <input type="number" id="v_h" step="0.1" oninput="autoJudge()"></div>
                 <div>體重(kg) <input type="number" id="v_w" step="0.1" oninput="autoJudge()"></div>
@@ -70,74 +75,70 @@
                 <div>Ferritin <input type="number" id="v_fer" oninput="autoJudge()"></div>
             </div>
             <table>
-                <tr id="row_h"><td>身高分位</td><td id="res_h">-</td><td><select class="score-input" id="s_h" onchange="calcGrandTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
-                <tr id="row_w"><td>體重分位</td><td id="res_w">-</td><td><select class="score-input" id="s_w" onchange="calcGrandTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
-                <tr id="row_hc"><td>頭圍分位</td><td id="res_hc">-</td><td><select class="score-input" id="s_hc" onchange="calcGrandTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
-                <tr id="row_hb"><td>血紅素</td><td id="res_hb">-</td><td><select class="score-input" id="s_hb" onchange="calcGrandTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
-                <tr id="row_fer"><td>鐵蛋白</td><td id="res_fer">-</td><td><select class="score-input" id="s_fer" onchange="calcGrandTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr><th>指標</th><th>判定狀態</th><th>得分 (1-3)</th></tr>
+                <tr id="row_h"><td>身高生長分位</td><td id="res_h">-</td><td><select class="score-input" id="s_h" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr id="row_w"><td>體重生長分位</td><td id="res_w">-</td><td><select class="score-input" id="s_w" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr id="row_hc"><td>頭圍生長分位</td><td id="res_hc">-</td><td><select class="score-input" id="s_hc" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr id="row_hb"><td>血紅素 (Hb)</td><td id="res_hb">-</td><td><select class="score-input" id="s_hb" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr id="row_fer"><td>鐵蛋白 (Fer)</td><td id="res_fer">-</td><td><select class="score-input" id="s_fer" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
             </table>
         </div>
 
         <div class="card">
-            <h2>呼吸功能與照顧能力</h2>
+            <h2>呼吸與照顧能量</h2>
             <table>
-                <tr><th>指標</th><th>得分 (1-3)</th></tr>
-                <tr><td>SpO2 (血氧飽和度)</td><td><select class="score-input" id="s_spo2" onchange="calcGrandTotal()"><option value="1">1 (≥95%)</option><option value="2">2 (90-94%)</option><option value="3">3 (<90%)</option></select></td></tr>
-                <tr><td>PaCO2 (二氧化碳)</td><td><select class="score-input" id="s_co2" onchange="calcGrandTotal()"><option value="1">1 (35-45)</option><option value="2">2 (45-55)</option><option value="3">3 (>55)</option></select></td></tr>
-                <tr><td>呼吸器使用時間</td><td><select class="score-input" id="s_vent" onchange="calcGrandTotal()"><option value="1">1 (<6hr)</option><option value="2">2 (日間使用)</option><option value="3">3 (全日依賴)</option></select></td></tr>
-                <tr><td>近三月感染住院</td><td><select class="score-input" id="s_inf" onchange="calcGrandTotal()"><option value="1">1 (無)</option><option value="2">2 (1次)</option><option value="3">3 (≥2次)</option></select></td></tr>
-                <tr><td>指標A: 照顧者疲憊</td><td id="hcws_display" style="font-weight:bold; color:var(--danger);">請先填寫自評頁<input type="hidden" id="s_hcws_idx" class="score-input" value="1"></td></tr>
-                <tr><td>指標B: 人力穩定度</td><td><select class="score-input" id="s_human" onchange="calcGrandTotal()"><option value="1">1 (充足)</option><option value="2">2 (偶缺)</option><option value="3">3 (單人)</option></select></td></tr>
+                <tr><th>指標項目</th><th>1分 (穩定)</th><th>2分 (中風)</th><th>3分 (高風)</th><th>得分</th></tr>
+                <tr><td>SpO2</td><td>≥95%</td><td>90-94%</td><td><90%</td><td><select class="score-input" id="s_spo2" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr><td>PaCO2</td><td>35-45</td><td>45-55</td><td>>55</td><td><select class="score-input" id="s_co2" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr><td>呼吸器使用</td><td><6hr</td><td>日間使用</td><td>全日依賴</td><td><select class="score-input" id="s_vent" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr><td>近3月感染</td><td>無</td><td>1次</td><td>≥2次</td><td><select class="score-input" id="s_inf" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+                <tr><td>指標A:自評</td><td colspan="3" id="hcws_status" style="color:var(--danger); font-weight:bold;">請先填寫右側自評表</td><td><span id="hcws_final_val">1</span><input type="hidden" id="s_hcws" class="score-input" value="1"></td></tr>
+                <tr><td>指標B:人力</td><td>充足</td><td>偶缺</td><td>單人</td><td><select class="score-input" id="s_human" onchange="calcTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
             </table>
         </div>
 
         <div class="footer-total">
-            <div style="font-size: 1.2em;">評估總分：<span id="grand_total" style="font-size: 1.5em; color: #2ecc71;">11</span> / 33</div>
+            <div>評估總分：<span id="grand_total" style="font-size: 2em; color: #2ecc71;">11</span> / 33</div>
             <div class="btn-group">
-                <button class="btn-action" style="background:var(--success);" onclick="exportExcel()">匯出 Excel</button>
-                <button class="btn-action" style="background:#8e44ad;" onclick="uploadToCloud()">☁️ 同步雲端</button>
+                <button class="btn-action btn-success" onclick="exportExcel()">匯出 Excel</button>
+                <button class="btn-action btn-cloud" onclick="uploadToCloud()">☁️ 雲端備份</button>
             </div>
         </div>
     </div>
 
     <div id="page-self" class="page">
         <h1>照顧者身心導航 (H-CWS)</h1>
-        <p style="font-size:0.85em; color:#666; text-align:center;">請點選最符合過去一週感受的選項</p>
-        <div id="q_list"></div>
-        <button class="btn-action" style="background:var(--accent); width:100%; margin-top:20px; font-size:1.2em;" onclick="submitHCWS()">完成自評並回傳</button>
+        <div class="card" style="background:#fff3cd; color:#856404; font-weight:bold;">計分說明：從不(0分)、很少(1分)、有時(2分)、經常(3分)、總是(4分)</div>
+        <div id="q_container"></div>
+        <button class="btn-action" style="background:var(--accent); width:100%; height:50px; font-size:1.2em; margin-top:20px;" onclick="submitSelf()">確認提交自評數據</button>
     </div>
 </div>
 
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyZCi8U60dLSl-MC4CTTybuhqXEYxNLl3B3azCs3BrH-BlVeiBt-kWwDTqvtXSMXM6l/exec";
 
-// WHO 數據 (簡化 Z-score 邏輯)
+// WHO 數據模型
 const WHO = {
-    male: { h:[49.9, 75.7, 87.8], w:[3.3, 9.6, 12.2], hc:[34.5, 46.1, 48.9], sd:{h:2.6, w:0.9, hc:1.3} },
+    male:   { h:[49.9, 75.7, 87.8], w:[3.3, 9.6, 12.2], hc:[34.5, 46.1, 48.9], sd:{h:2.6, w:0.9, hc:1.3} },
     female: { h:[49.1, 74.0, 85.4], w:[3.2, 8.9, 11.5], hc:[33.9, 44.8, 47.6], sd:{h:2.5, w:0.8, hc:1.2} }
 };
 
-const QS = [
-    "1. 覺得沒足夠時間處理自己的事", "2. 照顧孩子讓身體健康受影響",
-    "3. 照顧與工作/家庭間取捨壓力大", "4. 整體而言覺得照顧負擔很大",
-    "5. 覺得角色筋疲力竭(睡飽也沒用)", "6. 我不再是以前那個好的父母了",
-    "7. 對照顧孩子這件事已經麻木", "8. 照顧孩子原本的快樂感消失了"
-];
+const QS = ["1.沒時間處理自己事", "2.身體健康受影響", "3.照顧與責任取捨壓力", "4.覺得照顧負擔大", "5.角色筋疲力竭", "6.不再是好父母感到難受", "7.對照顧已麻木", "8.照顧快樂感消失"];
 const LABELS = ["從不", "很少", "有時", "經常", "總是"];
 
-// 初始化自評題目
-const qBox = document.getElementById('q_list');
+// 初始化題目
+const qContainer = document.getElementById('q_container');
 QS.forEach((q, i) => {
     let html = `<div class="q-row"><span class="q-text">${q}</span><div class="options-flex">`;
-    LABELS.forEach((label, v) => {
-        html += `<label class="opt-label"><input type="radio" name="hc${i}" value="${v}"><span>${label}</span><span style="color:#999;font-size:0.7em;">(${v})</span></label>`;
+    LABELS.forEach((txt, v) => {
+        html += `<label class="opt-label"><input type="radio" name="hc${i}" value="${v}"><span class="opt-txt">${txt}</span><span class="opt-score">${v}分</span></label>`;
     });
     html += `</div></div>`;
-    qBox.innerHTML += html;
+    qContainer.innerHTML += html;
 });
 
-let selfRawScore = 0;
-let selfDetails = [];
+let selfRawTotal = 0;
+let selfDetail = [];
 
 function showPage(p) {
     document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
@@ -146,21 +147,24 @@ function showPage(p) {
     document.getElementById('tab-'+p).classList.add('active');
 }
 
-function submitHCWS() {
-    selfRawScore = 0; selfDetails = [];
+function submitSelf() {
+    selfRawTotal = 0; selfDetail = [];
     for(let i=0; i<8; i++) {
         let sel = document.querySelector(`input[name="hc${i}"]:checked`);
         if(!sel) return alert("請完成所有 8 題自評！");
-        let val = parseInt(sel.value);
-        selfRawScore += val;
-        selfDetails.push(val);
+        let v = parseInt(sel.value);
+        selfRawTotal += v;
+        selfDetail.push(v);
     }
-    let converted = (selfRawScore <= 4) ? 1 : (selfRawScore <= 8 ? 2 : 3);
-    document.getElementById('s_hcws_idx').value = converted;
-    document.getElementById('hcws_display').innerHTML = `已完成 (${selfRawScore}分) -> <span style="color:var(--success)">${converted}分</span><input type="hidden" id="s_hcws_idx" class="score-input" value="${converted}">`;
-    alert("自評成功回傳！得分：" + converted);
+    // 轉換邏輯: 0-4=1, 5-8=2, >8=3
+    let s = (selfRawTotal <= 4) ? 1 : (selfRawTotal <= 8 ? 2 : 3);
+    document.getElementById('s_hcws').value = s;
+    document.getElementById('hcws_final_val').innerText = s;
+    document.getElementById('hcws_status').innerText = `✅ 已完成 (原始分:${selfRawTotal})`;
+    document.getElementById('hcws_status').style.color = "#27ae60";
+    alert(`自評完成！總分 ${selfRawTotal}，回傳得分為 ${s} 分`);
     showPage('main');
-    calcGrandTotal();
+    calcTotal();
 }
 
 function autoJudge() {
@@ -168,73 +172,79 @@ function autoJudge() {
     const e = new Date(document.getElementById('e_date').value);
     if(isNaN(b) || isNaN(e)) return;
 
-    let diff = (e - b) / (1000*60*60*24);
+    let diffDays = (e - b) / (1000*60*60*24);
     let bw = parseInt(document.getElementById('b_w').value) || 40;
     let bd = parseInt(document.getElementById('b_d').value) || 0;
-    let corrMonths = Math.max(0, Math.floor((diff - ((40*7)-(bw*7+bd))) / 30.44));
-    document.getElementById('age_info').innerText = "矯正月齡：" + corrMonths + " 個月";
+    let corrMonths = Math.max(0, Math.floor((diffDays - ((40*7)-(bw*7+bd))) / 30.44));
+    document.getElementById('age_info').innerText = `【分析結果】矯正月齡：${corrMonths} 個月`;
 
     let g = document.getElementById('gender').value;
     let ageIdx = Math.min(Math.floor(corrMonths/12), 2);
 
-    function run(id, val, m, sd) {
+    function check(id, val, m, sd) {
         if(!val) return;
         let z = (val - m) / sd;
-        let s = (Math.abs(z) <= 1) ? 1 : (Math.abs(z) <= 1.8) ? 2 : 3;
+        let s = (Math.abs(z) <= 1.03) ? 1 : (Math.abs(z) <= 1.88) ? 2 : 3;
         document.getElementById('s_'+id).value = s;
         document.getElementById('res_'+id).innerText = (s==1?"15-85th":(s==2?"3-15/85-97th":"<3rd/>97th"));
         document.getElementById('row_'+id).className = (s==3?'risk-3':(s==2?'risk-2':''));
     }
 
-    run('h', document.getElementById('v_h').value, WHO[g].h[ageIdx], WHO[g].sd.h);
-    run('w', document.getElementById('v_w').value, WHO[g].w[ageIdx], WHO[g].sd.w);
-    run('hc', document.getElementById('v_hc').value, WHO[g].hc[ageIdx], WHO[g].sd.hc);
+    check('h', document.getElementById('v_h').value, WHO[g].h[ageIdx], WHO[g].sd.h);
+    check('w', document.getElementById('v_w').value, WHO[g].w[ageIdx], WHO[g].sd.w);
+    check('hc', document.getElementById('v_hc').value, WHO[g].hc[ageIdx], WHO[g].sd.hc);
 
     let hb = parseFloat(document.getElementById('v_hb').value);
     if(hb) {
-        let hbs = (hb > 11) ? 1 : (hb >= 9 ? 2 : 3);
-        document.getElementById('s_hb').value = hbs;
-        document.getElementById('res_hb').innerText = (hbs==1?"正常":"貧血");
+        let s = (hb > 11 ? 1 : (hb >= 9 ? 2 : 3));
+        document.getElementById('s_hb').value = s;
+        document.getElementById('res_hb').innerText = (s==1?"正常": (s==2?"輕度貧血":"重度貧血"));
     }
-    calcGrandTotal();
+    calcTotal();
 }
 
-function calcGrandTotal() {
+function calcTotal() {
     let total = 0;
     document.querySelectorAll('.score-input').forEach(el => total += parseInt(el.value || 1));
     document.getElementById('grand_total').innerText = total;
 }
 
-function exportExcel() {
-    const d = [{
-        "姓名": document.getElementById('case_name').value, "總分": document.getElementById('grand_total').innerText,
-        "矯正月齡": document.getElementById('age_info').innerText, "H-CWS原始分": selfRawScore,
-        "Q1-8明細": selfDetails.join(",")
-    }];
-    const ws = XLSX.utils.json_to_sheet(d);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "評估結果");
-    XLSX.writeFile(wb, `評估_${d[0].姓名}.xlsx`);
-}
-
 async function uploadToCloud() {
     const name = document.getElementById('case_name').value;
-    if(!name) return alert("請輸入姓名後再同步！");
-    
+    if(!name) return alert("請先輸入姓名！");
+
     const payload = {
         name: name,
         age: document.getElementById('age_info').innerText,
         total_score: document.getElementById('grand_total').innerText,
-        hcws_raw: selfRawScore,
-        details: { answers: selfDetails, h_score: document.getElementById('s_h').value }
+        hcws_raw: selfRawTotal,
+        details: {
+            answers: selfDetail,
+            h_score: document.getElementById('s_h').value,
+            w_score: document.getElementById('s_w').value,
+            spo2_score: document.getElementById('s_spo2').value
+        }
     };
 
     try {
         await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-        alert("✅ 資料已同步至雲端試算表");
+        alert("✅ 資料已同步至 Google Sheets！");
     } catch (e) {
-        alert("❌ 同步失敗，請檢查網路");
+        alert("❌ 上傳失敗，請檢查網路連接");
     }
+}
+
+function exportExcel() {
+    const name = document.getElementById('case_name').value || "未命名";
+    const data = [{
+        "姓名": name, "評估總分": document.getElementById('grand_total').innerText,
+        "矯正月齡": document.getElementById('age_info').innerText, "H-CWS原始分": selfRawTotal,
+        "明細": JSON.stringify(selfDetail)
+    }];
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "評估報告");
+    XLSX.writeFile(wb, `${name}_呼吸評估.xlsx`);
 }
 </script>
 </body>
